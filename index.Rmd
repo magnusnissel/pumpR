@@ -1,0 +1,71 @@
+---
+title: "pumpR Workout Report"
+author: "Magnus Nissel"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+
+--- 
+output: bookdown::gitbook
+documentclass: book
+bibliography: [project.bib]
+biblio-style: apalike
+link-citations: yes
+description: "A linguistic investigation of the discourse on basketball on the Web"
+---
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+# Overview
+This is a year-by-year overview generated from my workout logs ^[I used to track via Fitocracy and now use FitNotes]. I have excluded cardio activities (e.g. indoor rowing, swimming) and there are a couple of untracked workouts missing from the data. 
+
+## Frequency
+The first plot shows the total number of days on which I logged a workout, the other displays the monthly sum of sets to account for workout length. 
+
+```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
+source("plot.R")
+
+# Full workout log
+log_df = read.csv(LOG_PATH)
+log_df$MONTH <- month(log_df$DATE, label=T)
+log_df$YEAR <- year(log_df$DATE)
+# Workout days
+days_df <- log_df %>% distinct(DATE)
+days_df$MONTH <- month(days_df$DATE, label=T)
+days_df$YEAR <- year(days_df$DATE)
+# Plot heatmaps
+days_ym <- group_by(days_df, YEAR, MONTH)
+workout_days <- summarise(days_ym, days=n())
+day_fig <- heat_plotter(workout_days, "MONTH", "YEAR", "days", "Workout days", "Workouts per month by year")
+
+log_ym <- group_by(log_df, YEAR, MONTH)
+sets <- summarise(log_ym, num_sets= n(), num_reps=mean(REPS))
+set_fig <- heat_plotter(sets, "MONTH", "YEAR", "num_sets", "Number of sets", "Sets per month by year")
+
+day_fig
+set_fig
+```
+
+My most active year was cleary 2013, with 20+ workouts per month from March to July. However, these were generally shorter workouts with body part splits. I am not quite
+sure about the three-month break in 2014, but my least active period was from September 2015 to April 2016. I tried some CrossFit in December - which I did no bother logging - and switched gyms ^[My previous contract ended in January and the new gym opened in May], but most of the absence was due work keeping me more busy than usual and the flu.
+
+```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
+workouts_months <- days_df %>% group_by(MONTH) %>% summarise(workouts =  n())
+ggplot(workouts_months, aes(x = MONTH, y=workouts)) + geom_bar(stat = "identity") + ggtitle("Workouts per month (all years)") + xlab("") + ylab("") + theme_tufte()
+
+sets_months <- log_df %>% group_by(MONTH) %>% summarise(num_sets =  n())
+ggplot(sets_months, aes(x = MONTH, y=num_sets)) + geom_bar(stat = "identity")  + ggtitle("Sets per month (all years)") + xlab("") + ylab("") + theme_tufte()
+
+
+```
+
+Apparently I am *really* motivated in August.
+
+
+

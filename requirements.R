@@ -1,0 +1,7 @@
+install.packages("readr")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("purrr")
+install.packages("lubridate")
+install.packages("ggplot2")
+installed.packages("ggthemes")
