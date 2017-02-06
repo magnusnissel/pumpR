@@ -23,9 +23,9 @@ knitr::opts_chunk$set(message = FALSE)
 ```
 
 # Overview
-This is a year-by-year overview generated from my workout logs ^[I used to track via Fitocracy and now use FitNotes]. I have excluded cardio activities (e.g. indoor rowing, swimming) and there are a couple of untracked workouts missing from the data. 
+This is a year-by-year overview generated from my workout logs ^[I used to track via [Fitocracy](https://www.fitocracy.com) and now use [FitNotes](https://play.google.com/store/apps/details?id=com.github.jamesgay.fitnotes)]. I have excluded cardio activities (e.g. indoor rowing, swimming) and there are a couple of untracked workouts missing from the data. 
 
-## Frequency
+## Workout frequency
 The first plot shows the total number of days on which I logged a workout, the other displays the monthly sum of sets to account for workout length. 
 
 ```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
@@ -57,15 +57,31 @@ sure about the three-month break in 2014, but my least active period was from Se
 
 ```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
 workouts_months <- days_df %>% group_by(MONTH) %>% summarise(workouts =  n())
-ggplot(workouts_months, aes(x = MONTH, y=workouts)) + geom_bar(stat = "identity") + ggtitle("Workouts per month (all years)") + xlab("") + ylab("") + theme_tufte()
+p <- ggplot(workouts_months, aes(x = MONTH, y=workouts, fill=workouts)) + geom_bar(stat = "identity") 
+p <- p + theme_tufte(ticks=FALSE) + ggtitle("Workouts per month (all years)") + xlab("") + ylab("") 
+p <- p + scale_fill_gradient2(low='white', high='steelblue')
+p
 
 sets_months <- log_df %>% group_by(MONTH) %>% summarise(num_sets =  n())
-ggplot(sets_months, aes(x = MONTH, y=num_sets)) + geom_bar(stat = "identity")  + ggtitle("Sets per month (all years)") + xlab("") + ylab("") + theme_tufte()
-
+p <- ggplot(sets_months, aes(x = MONTH, y=num_sets, fill=num_sets)) + geom_bar(stat = "identity") 
+p <- p + ggtitle("Sets per month (all years)") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
+p <- p + scale_fill_gradient2(low='white', high='steelblue')
+p
 
 ```
 
 Apparently I am *really* motivated in August.
+
+## The _big four_
+
+As much as isolation exercises help for hypertrophy, there is a good reason that four compound lifts have a special status ^[Feel free to argue that the Power Clean or Barbell Row should make the list, I'm siding with history on this one.].
+
+  - **squat**
+  - **deadlift**
+  - **bench press**
+  - **overhead press**
+
+Below are some stats on these four lifts, both in the _strict_ sense (counting only the classic barbell versions) and including all kinds of _variants_ from _machine hack squats_ to _one-armed presses_ with _extra thick dumbbells_.
 
 
 

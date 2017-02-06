@@ -65,4 +65,4 @@ fn_logs <- import_from_fitnotes()
 fc_logs <- import_from_fitocracy()
 
 logs <- rbind.data.frame(fn_logs, fc_logs)
-utils::write.csv(logs, LOG_PATH)  # in later versions, this will first also merge in logs from other sources (e.g Fitocracy) if available
+utils::write.csv(logs, LOG_PATH)

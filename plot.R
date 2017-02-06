@@ -12,7 +12,9 @@ source("config.R")
 options(scipen=999)
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 scale_fill_manual(values=cbPalette)
+scale_colour_manual(values=cbPalette)
 
+# To use for line and point colors, add
 num_formatter <- format_format(big.mark = ",", decimal.mark = ".", scientific = FALSE)
 
 theme_set(theme_tufte(base_family="DejaVu Sans"))
