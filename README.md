@@ -1,2 +1,32 @@
-# pumpR
-Parsing and visualizing workout logs 
+# About pumpR
+
+I am creating __pumpR__ as a way to get more practical experience with _R Markdown_ and the _bookdown_ package. I've also been
+meaning to take a closer look at my collected workout logs for a while. The project is only a few days old and will hopefully develop into something bigger in due time.
+
+
+## Using and developing pumpR
+
+If you would like to use _pumpR_ to visualize your own workout data or as a starting point to develop your own R-based workout reports, check out the [GitHub repository for pumpR](https://github.com/magnusnissel/pumpR) ^[I have decided to include my personal workout logs in this repository to give you some sample data to play with]. I also welcome you to join me in developing _pumpR_. The code for _pumpR_ is released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+The name is derived from the german slang term for bodybuilder (_Pumper_) ^[I just have to link the silly Rummelsnuff song here: https://www.youtube.com/watch?v=TKBDk6V8s2A], which is related to the term "pump" describing the temporary increase in muscle size right after high-volume workouts. 
+
+__Remember:__ _You will never be as big as your pump_.
+
+## Features
+
+The following features are (at least partially) implemented
+
+- Import of Fitocracy CSV files (only weight & rep based activities)
+- Import of FitNotes CSV files
+- Rename exercises via CSV table
+- Parse exercises for implement used (barbell, dumbbell etc.) and movement type (push, pull, etc.)
+- List all workouts
+- Some stastistics (e.g. number of workouts per year, total volume for each of the _big four_ barbell lifts, etc.)
+
+## Planned features
+
+- Normalize exercise names (develop and implement a semantic scheme for exercise naming)
+- Parse for past and current personal records
+- Annotate body parts (plus primary and secondary muscles involved) for each exercise
+- More and more detailed tables and plots
+
