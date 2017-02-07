@@ -12,5 +12,7 @@ FC_PATH <- file.path(DATA_DIR, "from_fitocracy.csv")
 LOG_PATH <- file.path(DATA_DIR, "workout_log.csv")
 PLOG_PATH <- file.path(DATA_DIR, "parsed_workout_log.csv")
 
+RENAME_PATH = file.path(BASE_DIR, "rename.csv")
+
 # Ensure folders exist
 suppressWarnings(dir.create(DATA_DIR))

@@ -1,0 +1,8 @@
+```{r, workout-{{d}}, results='asis', echo=FALSE}
+
+cat("## {{d}} {-}")
+w_df = log_df %>% filter(DATE == "{{d}}")
+kable(w_df[,c("EXERCISE","WEIGHT","REPS")])
+
+```
+ 

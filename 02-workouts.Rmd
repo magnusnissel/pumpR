@@ -1,0 +1,38 @@
+---
+title: "pumpR Workout Report"
+author: "Magnus Nissel"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+
+--- 
+output: bookdown::gitbook
+documentclass: book
+bibliography: [pumpr.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Creating a report from workout logs"
+---
+
+---
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+require(knitr)
+require(dplyr)
+source("config.R")
+```
+
+
+# Individual workouts
+
+
+```{r echo=FALSE}
+log_df = read.csv(PLOG_PATH)
+dates = sort(as.factor(unique(log_df$DATE)), decreasing=T)
+src <-lapply(dates, function(d) knit_expand("_template_workout.Rmd"))
+```
+
+`r knit(text = unlist(src))`

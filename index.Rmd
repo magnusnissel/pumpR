@@ -9,10 +9,10 @@ documentclass: book
 --- 
 output: bookdown::gitbook
 documentclass: book
-bibliography: [project.bib]
+bibliography: [pumpr.bib]
 biblio-style: apalike
 link-citations: yes
-description: "A linguistic investigation of the discourse on basketball on the Web"
+description: "Creating a report from workout logs"
 ---
 
 ---
@@ -32,7 +32,7 @@ The first plot shows the total number of days on which I logged a workout, the o
 source("plot.R")
 
 # Full workout log
-log_df = read.csv(LOG_PATH)
+log_df = read.csv(PLOG_PATH)
 log_df$MONTH <- month(log_df$DATE, label=T)
 log_df$YEAR <- year(log_df$DATE)
 # Workout days
@@ -45,43 +45,111 @@ workout_days <- summarise(days_ym, days=n())
 day_fig <- heat_plotter(workout_days, "MONTH", "YEAR", "days", "Workout days", "Workouts per month by year")
 
 log_ym <- group_by(log_df, YEAR, MONTH)
-sets <- summarise(log_ym, num_sets= n(), num_reps=mean(REPS))
-set_fig <- heat_plotter(sets, "MONTH", "YEAR", "num_sets", "Number of sets", "Sets per month by year")
+sets <- summarise(log_ym, Sets= n(), num_reps=mean(REPS))
+set_fig <- heat_plotter(sets, "MONTH", "YEAR", "Sets", "Number of sets", "Sets per month by year")
 
 day_fig
 set_fig
 ```
 
 My most active year was cleary 2013, with 20+ workouts per month from March to July. However, these were generally shorter workouts with body part splits. I am not quite
-sure about the three-month break in 2014, but my least active period was from September 2015 to April 2016. I tried some CrossFit in December - which I did no bother logging - and switched gyms ^[My previous contract ended in January and the new gym opened in May], but most of the absence was due work keeping me more busy than usual and the flu.
+sure about the three-month break in 2014, but my least active period was from September 2015 to April 2016. I tried some CrossFit in December - which I did no bother logging - and switched gyms ^[My previous membership ended in January and the new gym opened in May], but most of the absence was due work keeping me more busy than usual.
 
 ```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
-workouts_months <- days_df %>% group_by(MONTH) %>% summarise(workouts =  n())
-p <- ggplot(workouts_months, aes(x = MONTH, y=workouts, fill=workouts)) + geom_bar(stat = "identity") 
+workouts_months <- days_df %>% group_by(MONTH) %>% summarise(Workouts =  n())
+p <- ggplot(workouts_months, aes(x = MONTH, y=Workouts, fill=Workouts)) + geom_bar(stat = "identity") 
 p <- p + theme_tufte(ticks=FALSE) + ggtitle("Workouts per month (all years)") + xlab("") + ylab("") 
-p <- p + scale_fill_gradient2(low='white', high='steelblue')
+p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
 p
 
-sets_months <- log_df %>% group_by(MONTH) %>% summarise(num_sets =  n())
-p <- ggplot(sets_months, aes(x = MONTH, y=num_sets, fill=num_sets)) + geom_bar(stat = "identity") 
+sets_months <- log_df %>% group_by(MONTH) %>% summarise(Sets =  n())
+p <- ggplot(sets_months, aes(x = MONTH, y=Sets, fill=Sets)) + geom_bar(stat = "identity") 
 p <- p + ggtitle("Sets per month (all years)") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
-p <- p + scale_fill_gradient2(low='white', high='steelblue')
+p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
 p
 
 ```
 
 Apparently I am *really* motivated in August.
 
-## The _big four_
+## The _Big Four_
 
-As much as isolation exercises help for hypertrophy, there is a good reason that four compound lifts have a special status ^[Feel free to argue that the Power Clean or Barbell Row should make the list, I'm siding with history on this one.].
+  - **Squat**
+  - **Deadlift**
+  - **Bench Press**
+  - **Overhead Press**
 
-  - **squat**
-  - **deadlift**
-  - **bench press**
-  - **overhead press**
+### Traditional ^[_Flat Barbell Bench Press_, _Barbell (Sumo) Deadlift_, _(High/Low Bar) Barbell Back Squat_, _Standing Barbell Overhead Press_]
 
-Below are some stats on these four lifts, both in the _strict_ sense (counting only the classic barbell versions) and including all kinds of _variants_ from _machine hack squats_ to _one-armed presses_ with _extra thick dumbbells_.
+```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
+
+four <- filter(log_df, BIG_FOUR != "Other")
+four <- filter(four, !grepl("\\*", BIG_FOUR))
+four$YEAR <- year(four$DATE)
+four <- four  %>% group_by(YEAR, BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+
+p <- ggplot(four, aes(x = BIG_FOUR, y=Volume, fill=Volume)) + geom_bar(stat = "identity") 
+p <- p + ggtitle("Combined volume") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
+p <- p + scale_fill_gradient2(low='white', high='steelblue') + facet_wrap( ~ YEAR, ncol=2) + theme(legend.position="none")
+p
+
+d_four <- filter(log_df, BIG_FOUR != "Other")
+d_four <- filter(d_four, !grepl("\\*", BIG_FOUR))
+d_four <- d_four  %>% group_by(DATE, BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+
+p <- ggplot(d_four, aes(x=as.Date(DATE), y=Sets, group=BIG_FOUR, color=BIG_FOUR)) + geom_line()
+p <- p + scale_x_date() + xlab("") + ylab("") + theme_tufte(ticks=FALSE) 
+p <- p + ggtitle("Sets over time") + facet_grid(BIG_FOUR ~ .) + theme(legend.position="none")
+p
+
+```
+
+### With variations ^[All kinds of variants from _Machine Hack Squats_ to _One-Arm Dumbbell Presses_ are considered here.]
+
+
+```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
+four <- filter(log_df, grepl("\\*", BIG_FOUR))
+four <- four  %>% group_by(BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
 
 
 
+p <- ggplot(four, aes(x = BIG_FOUR, y=Volume, fill=Volume)) + geom_bar(stat = "identity") 
+p <- p + ggtitle("Combined volume") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
+p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
+p
+```
+
+## Implements
+
+__Note__: Not all exercises have been assigned the correct implement, yet. 
+
+```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
+
+four <- log_df  %>% group_by(IMPLEMENT) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+
+
+
+p <- ggplot(four, aes(x = IMPLEMENT, y=Sets)) + geom_bar(stat = "identity", colour="steelblue", fill="steelblue") 
+p <- p + ggtitle("Number of sets") + xlab("") + ylab("") + coord_flip() + theme_tufte(ticks=FALSE)
+p <- p + theme(legend.position="none") 
+p
+
+
+
+```
+
+## Movements
+
+__Note__: Not all exercises have been assigned the correct movement type, yet. 
+
+```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
+
+four <- log_df  %>% group_by(MOVEMENT) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+
+
+
+p <- ggplot(four, aes(x = MOVEMENT, y=Sets, fill=Sets)) + geom_bar(stat = "identity") 
+p <- p + ggtitle("Number of sets") + xlab("") + ylab("") + coord_flip() + theme_tufte(ticks=FALSE)
+p <- p + theme(legend.position="none") + scale_fill_gradient2(low='white', high='steelblue') 
+p
+```

@@ -27,7 +27,7 @@ p <- p + theme_tufte(ticks=FALSE, base_size=14)
 p <- p + geom_tile(stat="identity", aes_string(fill=fcol)) 
 p <- p + scale_fill_gradient(low="white", high="steelblue", label=num_formatter, name=fill_name)
 p <- p + geom_text(aes_string(fill = fcol, label = num_formatter(fcol)))
-p <- p + ggtitle(title) + xlab("") + ylab("") + scale_y_reverse()
+p <- p + ggtitle(title) + xlab("") + ylab("") + scale_y_reverse()  + theme(legend.position="none")
 }
 
 
