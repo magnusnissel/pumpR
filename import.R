@@ -6,12 +6,6 @@ require(lubridate)
 source("config.R")
 
 
-"
-The first version of this project will focus only on working with data from the Android app FitNotes by Jason Gay: 
-https://play.google.com/store/apps/details?id=com.github.jamesgay.fitnotes
-"
-
-
 merge_fn_logs <- function(f) {
   df <- read_csv(f, col_types = cols(.default = "c"))
   df["File"] <- basename(f)
@@ -24,6 +18,10 @@ merge_fn_logs <- function(f) {
 }
 
 import_from_fitnotes <- function() {
+  "Note that the current method of importing Fitocracy data is buggy for all activities that do not have sets and reps. This is 
+  because Fitocracy uses a very messy output format with named and unnamed columns and a different column number based on activity
+  type. The next version will parse the 'Combined' field, which appears to be present for all activities."
+
   csv_files <- dir(path=FN_DIR, pattern ="*.csv", full.name=TRUE)
   logs <- csv_files %>% map_df(merge_fn_logs)
   "Deduplicate, if there are multiple rows for the combination of  Date/Exercise/Set_Num then the same workout was logged in multiple CSV files. Source file

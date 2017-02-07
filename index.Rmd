@@ -22,134 +22,34 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 ```
 
-# Overview
-This is a year-by-year overview generated from my workout logs ^[I used to track via [Fitocracy](https://www.fitocracy.com) and now use [FitNotes](https://play.google.com/store/apps/details?id=com.github.jamesgay.fitnotes)]. I have excluded cardio activities (e.g. indoor rowing, swimming) and there are a couple of untracked workouts missing from the data. 
+# About pumpR
 
-## Workout frequency
-The first plot shows the total number of days on which I logged a workout, the other displays the monthly sum of sets to account for workout length. 
-
-```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
-source("plot.R")
-
-# Full workout log
-log_df = read.csv(PLOG_PATH)
-log_df$MONTH <- month(log_df$DATE, label=T)
-log_df$YEAR <- year(log_df$DATE)
-# Workout days
-days_df <- log_df %>% distinct(DATE)
-days_df$MONTH <- month(days_df$DATE, label=T)
-days_df$YEAR <- year(days_df$DATE)
-# Plot heatmaps
-days_ym <- group_by(days_df, YEAR, MONTH)
-workout_days <- summarise(days_ym, days=n())
-day_fig <- heat_plotter(workout_days, "MONTH", "YEAR", "days", "Workout days", "Workouts per month by year")
-
-log_ym <- group_by(log_df, YEAR, MONTH)
-sets <- summarise(log_ym, Sets= n(), num_reps=mean(REPS))
-set_fig <- heat_plotter(sets, "MONTH", "YEAR", "Sets", "Number of sets", "Sets per month by year")
-
-day_fig
-set_fig
-```
-
-My most active year was cleary 2013, with 20+ workouts per month from March to July. However, these were generally shorter workouts with body part splits. I am not quite
-sure about the three-month break in 2014, but my least active period was from September 2015 to April 2016. I tried some CrossFit in December - which I did no bother logging - and switched gyms ^[My previous membership ended in January and the new gym opened in May], but most of the absence was due work keeping me more busy than usual.
-
-```{r warning=FALSE, cache=FALSE, echo=FALSE, fig.width=8}
-workouts_months <- days_df %>% group_by(MONTH) %>% summarise(Workouts =  n())
-p <- ggplot(workouts_months, aes(x = MONTH, y=Workouts, fill=Workouts)) + geom_bar(stat = "identity") 
-p <- p + theme_tufte(ticks=FALSE) + ggtitle("Workouts per month (all years)") + xlab("") + ylab("") 
-p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
-p
-
-sets_months <- log_df %>% group_by(MONTH) %>% summarise(Sets =  n())
-p <- ggplot(sets_months, aes(x = MONTH, y=Sets, fill=Sets)) + geom_bar(stat = "identity") 
-p <- p + ggtitle("Sets per month (all years)") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
-p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
-p
-
-```
-
-Apparently I am *really* motivated in August.
-
-## The _Big Four_
-
-  - **Squat**
-  - **Deadlift**
-  - **Bench Press**
-  - **Overhead Press**
-
-### Traditional ^[_Flat Barbell Bench Press_, _Barbell (Sumo) Deadlift_, _(High/Low Bar) Barbell Back Squat_, _Standing Barbell Overhead Press_]
-
-```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
-
-four <- filter(log_df, BIG_FOUR != "Other")
-four <- filter(four, !grepl("\\*", BIG_FOUR))
-four$YEAR <- year(four$DATE)
-four <- four  %>% group_by(YEAR, BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
-
-p <- ggplot(four, aes(x = BIG_FOUR, y=Volume, fill=Volume)) + geom_bar(stat = "identity") 
-p <- p + ggtitle("Combined volume") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
-p <- p + scale_fill_gradient2(low='white', high='steelblue') + facet_wrap( ~ YEAR, ncol=2) + theme(legend.position="none")
-p
-
-d_four <- filter(log_df, BIG_FOUR != "Other")
-d_four <- filter(d_four, !grepl("\\*", BIG_FOUR))
-d_four <- d_four  %>% group_by(DATE, BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
-
-p <- ggplot(d_four, aes(x=as.Date(DATE), y=Sets, group=BIG_FOUR, color=BIG_FOUR)) + geom_line()
-p <- p + scale_x_date() + xlab("") + ylab("") + theme_tufte(ticks=FALSE) 
-p <- p + ggtitle("Sets over time") + facet_grid(BIG_FOUR ~ .) + theme(legend.position="none")
-p
-
-```
-
-### With variations ^[All kinds of variants from _Machine Hack Squats_ to _One-Arm Dumbbell Presses_ are considered here.]
+I am creating __pumpR__ as a way to get more practical experience with _R Markdown_ and the _bookdown_ package. I've also been
+meaning to take a closer look at my collected workout logs for a while. The project is only a few days old and will hopefully develop into something bigger in due time.
 
 
-```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
-four <- filter(log_df, grepl("\\*", BIG_FOUR))
-four <- four  %>% group_by(BIG_FOUR) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+## Using and developing pumpR
 
+If you would like to use _pumpR_ to visualize your own workout data or as a starting point to develop your own R-based workout reports, check out the [GitHub repository for pumpR](https://github.com/magnusnissel/pumpR) ^[I have decided to include my personal workout logs in this repository to give you some sample data to play with]. I also welcome you to join me in developing _pumpR_. The code for _pumpR_ is released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
+The name is derived from the german slang term for bodybuilder (_Pumper_) ^[I just have to link the silly Rummelsnuff song here: https://www.youtube.com/watch?v=TKBDk6V8s2A], which is related to the term "pump" describing the temporary increase in muscle size right after high-volume workouts. 
 
-p <- ggplot(four, aes(x = BIG_FOUR, y=Volume, fill=Volume)) + geom_bar(stat = "identity") 
-p <- p + ggtitle("Combined volume") + xlab("") + ylab("") + theme_tufte(ticks=FALSE)
-p <- p + scale_fill_gradient2(low='white', high='steelblue')  + theme(legend.position="none")
-p
-```
+__Remember:__ _You will never be as big as your pump_.
 
-## Implements
+## Features
 
-__Note__: Not all exercises have been assigned the correct implement, yet. 
+The following features are aready (at least partially) implemented
 
-```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
+- Import of Fitocracy CSV files (only weight & rep based activities)
+- Import of FitNotes CSV files
+- Rename exercises via a CSV table
+- Parse exercises for implement used (barbell, dumbbell etc.) and movement type (push, pull, etc.)
+- List all workouts
+- Some stastistics (e.g. number of workouts per year, total volume for each of the _big four_ barbell lifts, etc.)
 
-four <- log_df  %>% group_by(IMPLEMENT) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
+## Planned features
 
-
-
-p <- ggplot(four, aes(x = IMPLEMENT, y=Sets)) + geom_bar(stat = "identity", colour="steelblue", fill="steelblue") 
-p <- p + ggtitle("Number of sets") + xlab("") + ylab("") + coord_flip() + theme_tufte(ticks=FALSE)
-p <- p + theme(legend.position="none") 
-p
-
-
-
-```
-
-## Movements
-
-__Note__: Not all exercises have been assigned the correct movement type, yet. 
-
-```{r warning=FALSE, cache=FALSE, echo=FALSE, out.width="100%"}
-
-four <- log_df  %>% group_by(MOVEMENT) %>% dplyr::summarise(Sets = n(), Reps = sum(REPS), Volume = sum(VOLUME))
-
-
-
-p <- ggplot(four, aes(x = MOVEMENT, y=Sets, fill=Sets)) + geom_bar(stat = "identity") 
-p <- p + ggtitle("Number of sets") + xlab("") + ylab("") + coord_flip() + theme_tufte(ticks=FALSE)
-p <- p + theme(legend.position="none") + scale_fill_gradient2(low='white', high='steelblue') 
-p
-```
+- Normalize exercise names (develop and implement a semantic scheme for exercise naming)
+- Parse for past and current personal records
+- Annotate body parts (plus primary and secondary muscles involved) for each exercise
+- More and more detailed tables and plots
