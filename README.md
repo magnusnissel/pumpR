@@ -6,9 +6,11 @@ meaning to take a closer look at my collected workout logs for a while. The proj
 
 ## Using and developing pumpR
 
-If you would like to use _pumpR_ to visualize your own workout data or as a starting point to develop your own R-based workout reports, check out the [GitHub repository for pumpR](https://github.com/magnusnissel/pumpR) ^[I have decided to include my personal workout logs in this repository to give you some sample data to play with]. I also welcome you to join me in developing _pumpR_. The code for _pumpR_ is released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+If you would like to use _pumpR_ to visualize your own workout data or as a starting point to develop your own R-based workout reports, check out the [GitHub repository for pumpR](https://github.com/magnusnissel/pumpR). I have decided to include my personal workout logs in this repository to give you some sample data to play with. I also welcome you to join me in developing _pumpR_. The code for _pumpR_ is released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-The name is derived from the german slang term for bodybuilder (_Pumper_) ^[I just have to link the silly Rummelsnuff song here: https://www.youtube.com/watch?v=TKBDk6V8s2A], which is related to the term "pump" describing the temporary increase in muscle size right after high-volume workouts. 
+The name is derived from the german slang term for bodybuilder (_Pumper_), which is related to the term "pump" describing the temporary increase in muscle size right after high-volume workouts. 
+
+I just have to link the silly Rummelsnuff song here: https://www.youtube.com/watch?v=TKBDk6V8s2A
 
 __Remember:__ _You will never be as big as your pump_.
 
