@@ -38,11 +38,11 @@ __Remember:__ _You will never be as big as your pump_.
 
 ## Features
 
-The following features are aready (at least partially) implemented
+The following features are (at least partially) implemented
 
 - Import of Fitocracy CSV files (only weight & rep based activities)
 - Import of FitNotes CSV files
-- Rename exercises via a CSV table
+- Rename exercises via CSV table
 - Parse exercises for implement used (barbell, dumbbell etc.) and movement type (push, pull, etc.)
 - List all workouts
 - Some stastistics (e.g. number of workouts per year, total volume for each of the _big four_ barbell lifts, etc.)
@@ -53,3 +53,4 @@ The following features are aready (at least partially) implemented
 - Parse for past and current personal records
 - Annotate body parts (plus primary and secondary muscles involved) for each exercise
 - More and more detailed tables and plots
+
