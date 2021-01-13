@@ -1,3 +1,5 @@
+# Caution: This project is abandoned, I just keep it online in case someone finds it helpful as a starting point
+
 # About pumpR
 
 I am creating __pumpR__ as a way to get more practical experience with _R Markdown_ and the _bookdown_ package. I've also been
